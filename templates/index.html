@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Push Notifications Demo</title>
+</head>
+<body>
+    <h1>Push Notifications Demo</h1>
+
+    <script>
+        const publicVapidKey = "{{ vapid_public_key }}";
+
+        function urlBase64ToUint8Array(base64String) {
+            const padding = "=".repeat((4 - base64String.length % 4) % 4);
+            const base64 = (base64String + padding).replace(/\-/g, "+").replace(/_/g, "/");
+            const rawData = window.atob(base64);
+            const outputArray = new Uint8Array(rawData.length);
+            for (let i = 0; i < rawData.length; ++i) {
+                outputArray[i] = rawData.charCodeAt(i);
+            }
+            return outputArray;
+        }
+
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", async () => {
+                // Registrar el service worker
+                const register = await navigator.serviceWorker.register("/static/service_worker.js", {
+    scope: "/static/"
+
+
+                });
+
+                // Solicitar permiso para notificaciones
+                const permission = await Notification.requestPermission();
+
+                // Si el usuario concede permiso, crear la suscripción y enviarla al backend
+                if (permission === "granted") {
+                    const subscription = await register.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
+                    });
+
+                    await fetch("/api/push-subscriptions", {
+                        method: "POST",
+                        body: JSON.stringify({
+                            subscription_json: JSON.stringify(subscription)
+                        }),
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
