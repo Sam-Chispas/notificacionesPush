@@ -23,17 +23,14 @@
 
         if ("serviceWorker" in navigator) {
             window.addEventListener("load", async () => {
-                // Registrar el service worker
                 const register = await navigator.serviceWorker.register("/static/service_worker.js", {
     scope: "/static/"
 
 
                 });
 
-                // Solicitar permiso para notificaciones
                 const permission = await Notification.requestPermission();
 
-                // Si el usuario concede permiso, crear la suscripción y enviarla al backend
                 if (permission === "granted") {
                     const subscription = await register.pushManager.subscribe({
                         userVisibleOnly: true,
