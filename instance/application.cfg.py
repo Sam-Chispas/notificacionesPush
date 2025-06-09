@@ -7,5 +7,5 @@ DB_NAME = ''
 
 VAPID_PUBLIC_KEY = "BOrz_jEYzDz9p6RWavbN8LNY_7fMKTRJzVVuTppCg6i84X_eplqVfS4n5CqHZRhq2QxTVLqP8hzUSO_QwpGHRu7o"
 VAPID_PRIVATE_KEY = "Q8gRj4sOaiE-0yFiUQYYhMqns2KzRZQQHpSU1U8H94g"
-VAPID_CLAIMS = {"sub": "mailto:diosmio@meduelelacabeza.com"}
+VAPID_CLAIMS = {"sub": "mailto:nombre@mail.com"}
 
